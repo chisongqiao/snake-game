@@ -43,105 +43,105 @@ void food(int *x, int *y,int *fx,int *fy,int *s, struct snake *snake)
 
 用WASD控制蛇头的运动是通过改变蛇头的X,Y坐标实现的。
 
-void control(int *x,int *y,int *X,int *Y)//xy是蛇头的坐标，XY是控制运动方向的量
-{
-    if (_kbhit())
+    void control(int *x,int *y,int *X,int *Y)//xy是蛇头的坐标，XY是控制运动方向的量
     {
-        switch (_getch())
+        if (_kbhit())
         {
-        case 'w' :
-        case 'W' :
-            if(interf[*y - 1][*x]!='@'){   //if语句保证蛇不能倒着走
-                *X = 0; *Y = -1;
-            }
-            break;
-        case 'd':
-        case 'D':
-            if(interf[*y][*x + 1] != '@'){
-                *X = 1; *Y = 0;
-            }
+            switch (_getch())
+            {
+            case 'w' :
+            case 'W' :
+                if(interf[*y - 1][*x]!='@'){   //if语句保证蛇不能倒着走
+                    *X = 0; *Y = -1;
+                }
                 break;
-        case 's':
-        case 'S':
-            if (interf[*y + 1][*x] != '@') {
-                *X = 0; *Y = 1;
-            }
+            case 'd':
+            case 'D':
+                if(interf[*y][*x + 1] != '@'){
+                    *X = 1; *Y = 0;
+                }
+                    break;
+            case 's':
+            case 'S':
+                if (interf[*y + 1][*x] != '@') {
+                    *X = 0; *Y = 1;
+                }
+                    break;
+            case 'a':
+            case 'A':
+                if (interf[*y][*x - 1] != '@') {
+                    *X = -1; *Y = 0;
+                }
+                    break;
+            default:
                 break;
-        case 'a':
-        case 'A':
-            if (interf[*y][*x - 1] != '@') {
-                *X = -1; *Y = 0;
-            }
-                break;
-        default:
-            break;
-        } 
+            } 
+        }
+        *x = *x + *X;//改变一次位置
+        *y = *y + *Y;
     }
-    *x = *x + *X;//改变一次位置
-    *y = *y + *Y;
-}
 
 用定义蛇身子的结构体储存身子的XY坐标，然后定义蛇身子结构体数组存储每一节蛇身子。
 
-struct snake
-{
-    int number;
-    int snake_x;
-    int snake_y;
-    //struct snake *next;
-};
-
-struct snake a[(M - 2)*(N - 2)];
-
-
-void build_snake(struct snake *snake,int s,int *sx,int *sy)//sx,sy蛇头的位置
-{
-    for (int i = s; i >= 0; i--)
+    struct snake
     {
-        if (i == 0) {
-            (snake + i)->number = i;
-            (snake + i)->snake_x = *sx;
-            (snake + i)->snake_y = *sy;
-        }else{
-            (snake + i)->number = i;
-            (snake + i)->snake_x = (snake + i - 1)->snake_x;
-            (snake + i)->snake_y = (snake + i - 1)->snake_y;
+        int number;
+        int snake_x;
+        int snake_y;
+        //struct snake *next;
+    };
+
+    struct snake a[(M - 2)*(N - 2)];
+
+
+    void build_snake(struct snake *snake,int s,int *sx,int *sy)//sx,sy蛇头的位置
+    {
+        for (int i = s; i >= 0; i--)
+        {
+            if (i == 0) {
+                (snake + i)->number = i;
+                (snake + i)->snake_x = *sx;
+                (snake + i)->snake_y = *sy;
+            }else{
+                (snake + i)->number = i;
+                (snake + i)->snake_x = (snake + i - 1)->snake_x;
+                (snake + i)->snake_y = (snake + i - 1)->snake_y;
+            }
         }
     }
-}
 
 有了蛇身子和食物的坐标位置，将它们一起存储在一个表示整个界面的二位数组，然后循环打印整个数组形成动画效果！
 
-char interf[M][N];
+    char interf[M][N];
 
-void newinterface(struct snake *snake,  int fx, int fy,int s)
-{
-    int x, y;
-    for (int i = 0; i < M; i++)
+    void newinterface(struct snake *snake,  int fx, int fy,int s)
     {
-        for (int j = 0; j < N; j++)
+        int x, y;
+        for (int i = 0; i < M; i++)
         {
-            if (i == 0 || i == M - 1)
-                interf[i][j] = '-';
-                //printf("-");
-            else if (j == 0)
-                interf[i][j] = '|';
-                //printf("|");
-            else if (j == N - 1)
-                interf[i][j] = '|';
-                //printf("|\n");
-            else if (i == fy && j == fx)
-                interf[i][j] = '$';
-                //printf("$");
-            else  
-                interf[i][j] = ' ';
-                //printf(" ");
+            for (int j = 0; j < N; j++)
+            {
+                if (i == 0 || i == M - 1)
+                    interf[i][j] = '-';
+                    //printf("-");
+                else if (j == 0)
+                    interf[i][j] = '|';
+                    //printf("|");
+                else if (j == N - 1)
+                    interf[i][j] = '|';
+                    //printf("|\n");
+                else if (i == fy && j == fx)
+                    interf[i][j] = '$';
+                    //printf("$");
+                else  
+                    interf[i][j] = ' ';
+                    //printf(" ");
+            }
         }
+        for (; s >= 0; s--)
+        {
+                x = (snake + s)->snake_x;
+                y = (snake + s)->snake_y;
+                interf[y][x] = '@';
+        }   
     }
-    for (; s >= 0; s--)
-    {
-            x = (snake + s)->snake_x;
-            y = (snake + s)->snake_y;
-            interf[y][x] = '@';
-    }   
-}
