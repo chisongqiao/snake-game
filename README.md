@@ -5,15 +5,15 @@ this is a game about snake game by C
 蛇每吃一个食物蛇身子就增加一格，用WASD控制蛇头的运动，而蛇身子跟着蛇头走，每后一格蛇身子下一步走到上一格蛇身子的位置，以此类推。
 程序主要变量如下：
 
-#define M 20//整个图形界面的长和宽
-#define N 60
-    struct snake a[(M - 2)*(N - 2)];//蛇身数组
-    int snake_x =4;//蛇身的XY坐标
-    int snake_y =4;
-    int X = 1;//控制蛇头的方向量
-    int Y = 0;
-    int food_x , food_y ;//食物的XY坐标
-    int score = 0;//分数
+    #define M 20//整个图形界面的长和宽
+    #define N 60
+        struct snake a[(M - 2)*(N - 2)];//蛇身数组
+        int snake_x =4;//蛇身的XY坐标
+        int snake_y =4;
+        int X = 1;//控制蛇头的方向量
+        int Y = 0;
+        int food_x , food_y ;//食物的XY坐标
+        int score = 0;//分数
 
 食物的随机位置产生是通过两个随机数分别代表X,Y坐标实现的。
 void food(int *x, int *y,int *fx,int *fy,int *s, struct snake *snake)
